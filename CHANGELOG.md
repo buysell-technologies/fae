@@ -4,6 +4,7 @@
 
 - enhancements
     + Update dynamic relationships docs for pages and split out to make easier to find.
+    + Add support for HTML wysiwyg editor with images upload.
 - bugs
 
 ## 1.5
