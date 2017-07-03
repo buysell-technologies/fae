@@ -1,3 +1,3 @@
  CarrierWave.configure do |config|
-    config.cache_dir = 'public/tmp/fae/uploads'
+    config.cache_dir = 'tmp/fae/uploads'
  end
