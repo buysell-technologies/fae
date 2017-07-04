@@ -161,26 +161,26 @@ Fae.tables = {
   */
   treeSorting: function() {
     var oldContainer;
-    $list = $("ol.tree-list")
+    $list = $('ol.tree-list');
     group = $list.sortable({
       group: 'nested',
-      afterMove: function (placeholder, container) {
-        if(oldContainer != container){
-          if(oldContainer) {
+      afterMove: function(placeholder, container) {
+        if (oldContainer != container) {
+          if (oldContainer) {
             oldContainer.el.removeClass('active');
           }
           container.el.addClass('active');
           oldContainer = container;
         }
       },
-      onDrop: function ($item, container, _super) {
-        index = $list.find('li').index($item)
+      onDrop: function($item, container, _super) {
+        index = $list.find('li').index($item);
 
         var data = {
           item: $item.data('sortId'),
           parent: $(container.el.context).parent('li').data('sortId') || null,
-          sort_order: index == -1 ? null : index
-        }
+          sort_order: index == -1 ? null : index,
+        };
 
         if (data.item == data.parent) {
           // if for any reason, the drop location
@@ -189,17 +189,17 @@ Fae.tables = {
         }
 
         $.ajax({
-          url: Fae.path+'/sort_tree',
+          url: Fae.path + '/sort_tree',
           type: 'post',
-          data: {data: data},
+          data: { data: data },
           dataType: 'script',
-          complete: function(request){
+          complete: function(request) {
             // sort complete messaging can go here
-          }
+          },
         });
         container.el.removeClass('active');
         _super($item, container);
-      }
+      },
     });
   },
 
