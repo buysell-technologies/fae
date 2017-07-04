@@ -12,8 +12,20 @@ module Fae
 
     def sort_tree
       if request.xhr?
-        model, id = params[:data][:item].match(/(.+)?_(\d+)/).values_at(1, 2)
-        _, parent_id = params[:data][:parent].match(/(.+)?_(\d+)/).try(:values_at, 1, 2)
+        # the parameters are in this format
+        # params: {
+        #  data: {
+        #    item: 'news_article_24',
+        #    parent: 'news_article_3'
+        #  }
+        # }
+
+        # the regex matches the model's name and the id
+        model_name_and_id_re = /(.+)?_(\d+)/
+
+        model, id = params[:data][:item].match(model_name_and_id_re).values_at(1, 2)
+        _, parent_id = params[:data][:parent].match(model_name_and_id_re).try(:values_at, 1, 2)
+
         klass = model.classify.constantize
         record = klass.find(id)
         record.update_attribute(:parent_id, parent_id)
