@@ -38,7 +38,7 @@ module Fae
     end
 
     def language_preference
-      if params[:language].present? && (params[:language] == 'all' || Fae.languages.key?(params[:language].to_sym))
+      if params[:language].present? && (params[:language] == 'all' || Fae.languages.has_key?(params[:language].to_sym))
         current_user.update_column(:language, params[:language])
       end
       render body: nil
@@ -57,7 +57,7 @@ module Fae
 
     def can_toggle(klass)
       # restrict models that non-admins aren't allowed to update
-      restricted_classes = %w[Fae::User Fae::Role Fae::Option]
+      restricted_classes = %w(Fae::User Fae::Role Fae::Option)
       return false if restricted_classes.include?(klass.name.to_s) && !current_user.super_admin_or_admin?
       true
     end
