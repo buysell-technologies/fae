@@ -1,6 +1,5 @@
 module Fae
   class UtilitiesController < ApplicationController
-
     def toggle
       klass = params[:object].gsub('__', '/').classify.constantize
       if can_toggle(klass)
@@ -9,6 +8,20 @@ module Fae
       else
         render body: nil, status: :unauthorized
       end
+    end
+
+    def sort_tree
+      if request.xhr?
+        model, id = params[:data][:item].match(/(.+)?_(\d+)/).values_at(1, 2)
+        _, parent_id = params[:data][:parent].match(/(.+)?_(\d+)/).try(:values_at, 1, 2)
+        klass = model.classify.constantize
+        record = klass.find(id)
+        record.update_attribute(:parent_id, parent_id)
+        if params[:data][:sort_order].present?
+          record.insert_at(params[:data][:sort_order].to_i)
+        end
+      end
+      render body: nil
     end
 
     def sort
@@ -25,7 +38,7 @@ module Fae
     end
 
     def language_preference
-      if params[:language].present? && (params[:language] == 'all' || Fae.languages.has_key?(params[:language].to_sym))
+      if params[:language].present? && (params[:language] == 'all' || Fae.languages.key?(params[:language].to_sym))
         current_user.update_column(:language, params[:language])
       end
       render body: nil
@@ -44,7 +57,7 @@ module Fae
 
     def can_toggle(klass)
       # restrict models that non-admins aren't allowed to update
-      restricted_classes = %w(Fae::User Fae::Role Fae::Option)
+      restricted_classes = %w[Fae::User Fae::Role Fae::Option]
       return false if restricted_classes.include?(klass.name.to_s) && !current_user.super_admin_or_admin?
       true
     end
@@ -56,6 +69,5 @@ module Fae
       end
       records
     end
-
   end
 end
