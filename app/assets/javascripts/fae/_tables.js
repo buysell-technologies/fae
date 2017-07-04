@@ -179,10 +179,10 @@ Fae.tables = {
         var data = {
           item: $item.data('sortId'),
           parent: $(container.el.context).parent('li').data('sortId') || null,
-          sort_order: index == -1 ? null : index,
+          sort_order: index === -1 ? null : index,
         };
 
-        if (data.item == data.parent) {
+        if (data.item === data.parent) {
           // if for any reason, the drop location
           // is the item's own location, just abort process.
           return;
