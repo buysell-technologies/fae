@@ -174,16 +174,16 @@ Fae.tables = {
         }
       },
       onDrop: function($item, container, _super) {
-        var index;
+        var index
         var parent = $item.parents('li')[0]
         if(parent) {
           // when dropped inside a container, there will be a parent
           // '> ol > li' means to only the direct decendents (excluding the children)
-          var index = $(parent).find('> ol > li').index($item);
+          index = $(parent).find('> ol > li').index($item);
         } else {
           // when dropped at the root level, there are no parents
           // '> li' means to only the root list items
-          var index = $list.find('> li').index($item);
+          index = $list.find('> li').index($item);
         }
 
         var data = {
